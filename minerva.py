@@ -17,8 +17,14 @@ class Minerva2:
     def reset(self):
         self.memory = np.empty((0, self.trace_size))
 
-    def learn(learning_data, learning_rate = 1):
-        _data = canonicalisation(learning_data, self.trace_size)
+    def learn(self, learning_data, learning_rate = 1):
+        _data = np.reshape(learning_data, (-1, self.trace_size))
         self.memory = np.concatenate((self.memory, _data), axis = 0)
         
-    def respond():
+    def respond(self, probes, recurrence = 1):
+        pass
+    
+    def _probe_similarity(self, probe):
+        numer = np.dot(self.memory, probe)
+        denom = 0
+        return np.divide(numer, denom)
