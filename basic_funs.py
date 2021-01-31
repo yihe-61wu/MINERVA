@@ -1,48 +1,18 @@
-from __future__ import division
 import numpy as np
 
-# this function can be completely replaced by numpy.reshape(data, (-1, item_dim))
-def canonicalisation(data, item_dim, legal_range = None):
+def collapse(probas):
     """
     Parameters
     ----------
-    data: Any numeric array, consisting of single or multiple items.
-    item_dim: The canonical dimensionality of each item in the data.
-    legal_range: If any individual value is outside legal_range, the data cannot be processed.
+    probas: An array of probablities.
     
     Returns
     -------
-    y: A n-D numpy array, whose 0th axis contains the item index,
-       and the dimensionality of each item is item_dim.
+    b: An array of binary states, whose dimensionality is identical to probas.
     """
-    x = np.asarray(data).flatten()
-    # check individual data
-    if legal_range is not None:
-        if isinstance(legal_range, list):
-            for i in x:
-                if i not in legal_range:
-                    raise ValueError("The data contains at least one illegal value:", i)
-        elif isinstance(legal_range, tuple):
-            for i in x:
-                if i < legal_range[0] or i > legal_range[1]:
-                    raise ValueError("The data contains at least one illegal value:", i)
-    # obtain the canonical shape of data
-    y = x.reshape(np.insert(item_dim, 0, x.size / np.prod(item_dim)))
-    return y
-
-def collapse(probs):
-    """
-    Parameters
-    ----------
-    probs: An array of probablities.
-    
-    Returns
-    -------
-    states: An array of binary states, whose dimensionality is identical to probs.
-    """
-    probs = np.asarray(probs)
-    states = probs >= np.random.rand(*probs.shape)
-    return states * 1
+    p = np.asarray(probas)
+    b = p >= np.random.rand(*p.shape)
+    return b.astype(int)
 
 def logistic(x, temperature = 1.0):
     """
