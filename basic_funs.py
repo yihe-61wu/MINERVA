@@ -29,14 +29,13 @@ def logistic(x, temperature = 1.0):
     The function is numerically stable for very big/small values.
     """
     _x = np.asarray(x)
-    if temperature == 0:
-        # The logistic function is reduced to a step function.
+    if temperature == 0: # The logistic function is reduced to a step function.
         y = np.zeros(_x.shape)
         y[_x > 0] = 1.0
         y[_x == 0] = 0.5     
     else:
         norx = _x / temperature
-        mask_p = norx >= 0
+        mask_p = norx > 0
         mask_n = norx < 0        
         y = np.ones_like(norx)
         y[mask_p] = 1 / (1 + np.exp(-norx[mask_p]))
@@ -61,31 +60,22 @@ def softmax(x, temperature = 1.0):
     -------
     The function is numerically stable for very big/small values.
     """
-    _x = np.asarray(x)
+    # normalise x so that the biggest value is 0; this stablises np.exp
+    norx = x - np.amax(x, axis = 1).reshape(len(x), 1)
     _p = []
     if temperature == 0:
-        for _xrow in _x:
-            _prow = np.zeros_like(_xrow)
-            maxidx = np.nonzero(_xrow)
-            _prow[maxidx] = 1 / maxidx[0].size
-            _p.append(_prow)
-    p = np.reshape(_p, _x.shape)
+        for xrow in norx:
+            prow = np.zeros_like(xrow, dtype = float)
+            mask_max = xrow == 0
+            prow[mask_max] = 1 / np.count_nonzero(mask_max)
+            _p.append(prow)
+    else:
+        for xrow in norx:
+            e = np.exp(xrow / temperature)
+            prow = e / np.sum(e)
+            _p.append(prow)
+    p = np.reshape(_p, norx.shape)
     return p
-        
-    #     for item in _x:
-    #         prob = np.zeros(item_size)
-    #         maxids 
-    #         prob[maxids] = 1 / len(maxids)
-    #         probs.append(prob)
-    # else:
-    #     for item in canx:
-    #         noritem = (item - np.amax(item)) / temperature
-    #         pitem = np.exp(noritem)
-    #         prob = pitem / np.sum(pitem)
-    #         probs.append(prob)            
-             
-    # y = canonicalisation(probs, item_size)
-    # return y
 
 def entropy(P, base = None):
     """
