@@ -30,11 +30,22 @@ class Minerva2: # Hintzman (1984)
     def respond(self, probes, recurrence = 1):
         pass
     
-    def _probe_similarity(self, probe): # Eq.1
-        numer = np.dot(self.memory, probe)
-        denom = self.trace_size - np.dot(proba0(self.memory), proba0(probe))
-        if denom == 0:
-            sim = np.zeros(len(probe))
-        else:
-            sim = np.divide(numer, denom)
-        return sim
+    def _echo(self, probes):
+        _probe = np.reshape(probes, (-1, self.trace_size))
+        similarity = np.dot(self.memory, _probe.T) # Eq. 1
+        activation = similarity ** 3 # Eq. 2
+        intensity = np.sum(activation, axis = 0) # Eq. 3
+        content = np.dot(activation.T, self.memory) # Eq. 4
+        normalised_echo = content / np.amax(np.abs(content), axis = 1).reshape((-1, 1))
+        return intensity, normalised_echo
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
