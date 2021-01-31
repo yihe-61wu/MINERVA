@@ -50,12 +50,12 @@ def softmax(x, temperature = 1.0):
     """
     Parameters
     ----------
-    x: A two-dimensional numeric array.
+    x: A two-dimensional numeric array; each row is a distribution of activations.
     temperature: A non-negative number controlling the slope of the function.
     
     Returns
     -------
-    y: The value of the function, which is often used as a probability. Each row adds up to 1.
+    P: The value of the function, which is often used as a probability. Each row adds up to 1.
     
     -------
     The function is numerically stable for very big/small values.
@@ -74,26 +74,27 @@ def softmax(x, temperature = 1.0):
             e = np.exp(xrow / temperature)
             prow = e / np.sum(e)
             _p.append(prow)
-    p = np.reshape(_p, norx.shape)
-    return p
+    P = np.reshape(_p, norx.shape)
+    return P
 
 def entropy(P, base = None):
     """
     Parameters
     ----------
-    P: A discrete probability distribution listed in a numeric array.
+    P: A two-dimensional numeric array; each row is a probability distribution.
     base: The logarithmic base when calculating entropy with the default value being e.
     
     Returns
     -------
-    H: The entropy of the distribution P.
+    H: The entropy of each distribution in P.
     """
-    ps = P / np.sum(P)
-    ps[ps == 0] = 1 # plog(p) = when p = 0 or 1
+    norp = P / np.sum(P, axis = 1).reshape(len(P), 1)
+    norp[norp == 0] = 1 # plog(p) = when p = 0 or 1
     if base is None:
         denom = 1
     else:
         denom = np.log(base)
-    logps = np.log(ps) / denom
-    return -np.dot(ps, logps)
+    logp = np.log(norp) / denom
+    H = np.asarray([-np.dot(ps, logps) for ps, logps in zip(norp, logp)])
+    return H
     
