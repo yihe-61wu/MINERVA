@@ -1,3 +1,4 @@
-[submodule "basic-functions"]
-	path = basic-functions
-	url = https://github.com/anish-lu-yihe/basic-functions.git
+[submodule "basic_functions"]
+	path = basic_functions
+	url = https://github.com/anish-lu-yihe/basic_functions
+	branch = main
