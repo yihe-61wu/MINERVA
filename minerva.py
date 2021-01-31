@@ -28,7 +28,10 @@ class Minerva2: # Hintzman (1984)
         self.memory = np.concatenate((self.memory, _data), axis = 0)
         
     def respond(self, probes, recurrence = 1):
-        pass
+        echo = probes[:]
+        for epoch in range(recurrence):
+            echo = self._echo(echo)[1]
+        return echo
     
     def _echo(self, probes):
         _probe = np.reshape(probes, (-1, self.trace_size))
