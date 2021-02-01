@@ -23,7 +23,7 @@ class Minerva2: # Hintzman (1984)
     def reset(self):
         self.memory = np.empty((0, self.trace_size))
 
-    def learn(self, learning_data, learning_rate = 1):
+    def learn(self, learning_data):
         _data = np.reshape(learning_data, (-1, self.trace_size))
         self.memory = np.concatenate((self.memory, _data), axis = 0)
         
