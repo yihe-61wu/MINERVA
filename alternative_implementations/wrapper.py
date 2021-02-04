@@ -29,6 +29,7 @@ class model2:
         string = ''.join(file.readlines())
         self.funs = SignatureTranslatedAnonymousPackage(string, 'functions')
         # ###
+        self.model = 'Minerva2'
         self.trace_size = trace_size
         self.reset()
     
@@ -36,10 +37,24 @@ class model2:
         self.memory = np.empty((0, self.trace_size))
         
     def learn(self, learning_data):
-        for vector in learning_data:
-            past_memory, new_event = [self._py2ri(data) for data in [self.memory, vector]]
-            new_memory = self.funs.learn(event = new_event, memory = past_memory, p_encode = 1, model = 'Minerva2') 
+        for row in learning_data:
+            past_memory, new_event = [self._py2ri(data) for data in [self.memory, row]]
+            new_memory = self.funs.learn(event = new_event, memory = past_memory, p_encode = 1, model = self.model) 
             self.memory = self._ri2py(new_memory)
+    
+    def respond(self, probes, recurrence = 1):
+        echo = probes[:]
+        for epoch in range(recurrence):
+            echo = self._echo(echo)
+        return echo        
+    
+    def _echo(self, probes):
+        echo = []
+        for row in probes:
+            past_memory, new_probe, cueidx = [self._py2ri(data) for data in [self.memory, [row], np.arange(self.trace_size) + 1]]
+            r_echo = self.funs.probe_memory(probe = new_probe, memory = past_memory, cue_feature = cueidx, model = self.model)
+            echo.append(r_echo)
+        return np.asarray(echo)
     
     def _py2ri(self, data):
         return rpyn.py2ri(np.asarray(data))
