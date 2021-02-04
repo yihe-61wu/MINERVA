@@ -49,7 +49,7 @@ class Minerva2:
         similarities = (noised_probes @ model_arr.T)/noised_probes.shape[1]
         activations = similarities**3
         intensities = np.mean(activations, axis=1)
-        return intensities
+        return intensities, activations # for compatiblity
     
     def add_trace(self, trace, noise_ratio):
         if type(trace) != np.ndarray:
