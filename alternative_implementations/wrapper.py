@@ -1,7 +1,8 @@
 import numpy as np
 
 import minerva2 as dwhite54
-import rpy2.robjects as robjects
+from rpy2.robjects.packages import SignatureTranslatedAnonymousPackage
+import rpy2.robjects.numpy2ri as rpyn
 
 class model1(dwhite54.Minerva2):
     def reset(self):
@@ -23,18 +24,25 @@ class model1(dwhite54.Minerva2):
         return intensity, normalised_echo
 
 class model2:
-    def __init__(self, feature_num):
-        deniztu = robjects.r['source']
-        deniztu("minerva-al.R")
-        self.r_probe_memory = robjects.globalenv['probe_memory']
-        self.r_expect_event = robjects.globalenv['expect_event']
-        self.r_learn = robjects.globalenv['learn']
-        ###
-        self.feature_num = feature_num
+    def __init__(self, trace_size):
+        file = open('minerva-al.R')
+        string = ''.join(file.readlines())
+        self.funs = SignatureTranslatedAnonymousPackage(string, 'functions')
+        # ###
+        self.trace_size = trace_size
         self.reset()
     
     def reset(self):
         self.memory = np.empty((0, self.trace_size))
         
     def learn(self, learning_data):
-        pass
+        for vector in learning_data:
+            past_memory, new_event = [self._py2ri(data) for data in [self.memory, vector]]
+            new_memory = self.funs.learn(event = new_event, memory = past_memory, p_encode = 1, model = 'Minerva2') 
+            self.memory = self._ri2py(new_memory)
+    
+    def _py2ri(self, data):
+        return rpyn.py2ri(np.asarray(data))
+    
+    def _ri2py(self, data):
+        return rpyn.ri2py(data)
