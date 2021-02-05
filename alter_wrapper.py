@@ -25,7 +25,7 @@ class model1(dwhite54.Minerva2):
 
 class model2:
     def __init__(self, trace_size):
-        file = open('minerva-al.R')
+        file = open('alternative_implementations/minerva-al.R')
         string = ''.join(file.readlines())
         self.funs = SignatureTranslatedAnonymousPackage(string, 'functions')
         # ###
