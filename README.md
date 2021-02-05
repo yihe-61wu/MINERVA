@@ -19,6 +19,9 @@ I do not choose it, simply because I am too lazy to import R into Python.
 (I am working on a bigger project in which I need to compare different memory models, including MINERVA, 
 so it seems to me more natural to use Python to pack everything belonging to a model, like a memory matrix, inside a class.)
 
+I have made a primary performance comparison between my implementation and the above two. 
+Please refer to [`implementation_comparison.ipynb`](https://github.com/anish-lu-yihe/MINERVA/blob/main/implementation_comparison.ipynb) for the details.
+
 ## References
 1. MINERVA 2: [Hintzman (1984)](https://link.springer.com/article/10.3758/BF03202365)
 2. MINERVA-AL: (t.b.c) 
