@@ -22,6 +22,9 @@ class Minerva2: # Hintzman (1984)
     
     def reset(self):
         self.memory = np.empty((0, self.trace_size))
+    
+    def get_memory_matrix(self):
+        return self.memory
 
     def learn(self, learning_data):
         _data = np.reshape(learning_data, (-1, self.trace_size))

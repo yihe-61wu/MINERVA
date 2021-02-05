@@ -8,6 +8,9 @@ class model1(dwhite54.Minerva2):
     def reset(self):
         self.__init__(self.features_per_trace)
         
+    def get_memory_matrix(self):
+        return self.model
+        
     def learn(self, learning_data):
         self.add_traces(np.reshape(learning_data, (-1, self.features_per_trace)), 0)
     
@@ -35,6 +38,9 @@ class model2:
     
     def reset(self):
         self.memory = np.empty((0, self.trace_size))
+        
+    def get_memory_matrix(self):
+        return self.memory
         
     def learn(self, learning_data):
         for row in learning_data:
