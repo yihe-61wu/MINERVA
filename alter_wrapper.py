@@ -21,7 +21,7 @@ class model1(dwhite54.Minerva2):
         return echo
     
     def _echo(self, probes):
-        intensity, activation = self.get_echo_intensities(np.reshape(probs, (-1, self.features_per_trace)), 0)        
+        intensity, activation = self.get_echo_intensities(np.reshape(probes, (-1, self.features_per_trace)), 0)        
         content = np.dot(activation, self.model)
         normalised_echo = content / np.amax(np.abs(content), axis = 1).reshape((-1, 1))
         return intensity, normalised_echo
