@@ -2,6 +2,9 @@
 This is a Python 3 implementation of MINERVA, 
 a series of memory systems developed since 1980s by Douglas L. Hintzman, coworkers and followers.
 
+To deploy my implementation, the only thing you need is `minerva.py`. 
+The dependencies are Python 3 and Numpy.
+
 ## MINERVA 2
 I found some other GitHub repositories helpful (whereas most of the results when searching with 'MINERVA' are irrelevant), 
 but none serves my own purpose. 
