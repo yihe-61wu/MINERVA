@@ -1,6 +1,6 @@
 import numpy as np
 
-import minerva2 as dwhite54
+import alternative_implementations.minerva2 as dwhite54
 from rpy2.robjects.packages import SignatureTranslatedAnonymousPackage
 import rpy2.robjects.numpy2ri as rpyn
 
