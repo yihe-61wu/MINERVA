@@ -43,7 +43,7 @@ class model2:
         return self.memory
         
     def learn(self, learning_data):
-        for row in learning_data:
+        for row in np.reshape(learning_data, (-1, self.trace_size)):
             past_memory, new_event = [self._py2ri(data) for data in [self.memory, row]]
             new_memory = self.funs.learn(event = new_event, memory = past_memory, p_encode = 1, model = self.model) 
             self.memory = self._ri2py(new_memory)
