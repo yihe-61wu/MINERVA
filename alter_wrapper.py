@@ -56,7 +56,7 @@ class model2:
     
     def _echo(self, probes):
         echo = []
-        for row in probes:
+        for row in np.reshape(probes, (-1, self.trace_size)):
             past_memory, new_probe, cueidx = [self._py2ri(data) for data in [self.memory, [row], np.arange(self.trace_size) + 1]]
             r_echo = self.funs.probe_memory(probe = new_probe, memory = past_memory, cue_feature = cueidx, model = self.model)
             echo.append(r_echo)
